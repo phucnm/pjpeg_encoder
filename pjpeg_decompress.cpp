@@ -30,10 +30,10 @@ void transform_y(const vector<vector<int>>& Y, vector<vector<unsigned char>>& ou
                 for (unsigned x = 0; x < 8; x++) {
                     block.at(y).at(x) = Y.at(bh * 8 + y).at(bw * 8 + x);
                 }
-            auto q_output = create_2d_vector<int>(8, 8);
+            auto q_output = create_2d_vector<double>(8, 8);
             dequantize(block, const_medium_quantize_vector, q_output);
             auto dct_output = create_2d_vector<unsigned char>(8, 8);
-            idct(q_output, dct_output);
+            dct8_2d_inverse_transform(q_output, dct_output);
 
             for (unsigned h = 0; h < 8; h++)
                 for (unsigned w = 0; w < 8; w++) {
@@ -101,10 +101,10 @@ void read_plane(InputBitStream &input_stream, vector<vector<unsigned char>>& pla
         for (unsigned int bw = 0; bw < y_w / 8; bw++) {
             auto block = create_2d_vector<int>(8, 8);
             read_block(input_stream, block);
-            auto q_output = create_2d_vector<int>(8, 8);
+            auto q_output = create_2d_vector<double>(8, 8);
             dequantize(block, const_medium_quantize_vector, q_output);
             auto dct_output = create_2d_vector<unsigned char>(8, 8);
-            idct(q_output, dct_output);
+            dct8_2d_inverse_transform(q_output, dct_output);
 
             //put idct block to the plane matrix
             for (unsigned int h = 0; h < 8; h++)
@@ -120,10 +120,10 @@ void transform_and_fill_zzblock(const vector<vector<int>>& quantize_vector,
                                 int block_h_idx, int block_w_idx) {
     auto block = create_2d_vector<int>(8, 8);
     zigzag_inflate(zz_block, block);
-    auto q_output = create_2d_vector<int>(8, 8);
+    auto q_output = create_2d_vector<double>(8, 8);
     dequantize(block, quantize_vector, q_output);
     auto dct_output = create_2d_vector<unsigned char>(8, 8);
-    idct(q_output, dct_output);
+    dct8_2d_inverse_transform(q_output, dct_output);
 
     //put idct block to the plane matrix
     for (unsigned int h = 0; h < 8; h++)

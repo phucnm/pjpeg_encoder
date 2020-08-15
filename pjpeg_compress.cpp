@@ -243,15 +243,14 @@ void output_plane(OutputBitStream &output_stream, const vector<vector<int>>& qua
     for (int bh = 0; bh < in_h / 8; bh++)
         for (int bw = 0; bw < in_w / 8; bw++) {
             //grab the 8x8 block starting at top left bh, bw
-            auto block = create_2d_vector<unsigned char>(8, 8);
+            auto block = create_2d_vector<double>(8, 8);
             for (int y = 0; y < 8; y++)
                 for (int x = 0; x < 8; x++) {
-                    block.at(y).at(x) = in.at(bh * 8 + y).at(bw * 8 + x);
+                    block.at(y).at(x) = (double)in.at(bh * 8 + y).at(bw * 8 + x);
                 }
-            auto output = create_2d_vector<double>(8, 8);
-            dct(block, output);
+            dct8_2d_transform(block);
             auto q_output = create_2d_vector<int>(8, 8);
-            quantize(output, quantize_vector, q_output);
+            quantize(block, quantize_vector, q_output);
 
             vector<int> flatten = zigzag_flatten(q_output);
             //Checking
