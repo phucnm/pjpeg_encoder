@@ -11,5 +11,12 @@ To decompress back to a bmp,
 `./pjpeg -d compressed.pjpeg decompressed.bmp`
 
 # Demo
-The Lena image is compressed in 3 settings: high, medium and low.
+The Lena bmp image (786 KB) is compressed in 3 settings: high, medium and low.
 ![figure](demo/lena.png)
+
+The compression ratios are:
+- low: 56.14 (14 KB)
+- medium: 35.72 (22 KB)
+- high: 21.8 (36 KB)
+
+To visually evaluate all images in the `test_images` folder, run `bash test.sh`.
